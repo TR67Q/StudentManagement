@@ -2,15 +2,19 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>受講生登録</title>
+  <title>受講生更新</title>
 </head>
 <body>
-<h1>受講生登録</h1>
-<form th:action="@{/registerStudent}" th:object="${studentDetail}" method="post">
-<div>
-  <label for="name">名前:</label>
-  <input type="text" id="name" th:field="*{student.name}" required />
-</div>
+<h1>受講生更新</h1>
+<form th:action="@{/updateStudent}" th:object="${studentDetail}" method="post">
+  <div>
+    <label for="id">ID:</label>
+    <input type="text" id="id" th:field="*{student.id}" required />
+  </div>
+  <div>
+    <label for="name">名前:</label>
+    <input type="text" id="name" th:field="*{student.name}" required />
+  </div>
   <div>
     <label for="kanaName">カナ名:</label>
     <input type="text" id="kanaName" th:field="*{student.kanaName}" required />
@@ -44,6 +48,11 @@
     <input type="text" id="remark" th:field="*{student.remark}"/>
   </div>
   <div th:each="course, stat : *{studentsCourses}">
+    <label for="id__${stat.index}__" th:for="studentsCourses[__${stat.index}__].id">受講コースID:</label>
+    <input type="text" id="id__${stat.index}__"
+           th:field="*{studentsCourses[__${stat.index}__].id}" />
+  </div>
+  <div th:each="course, stat : *{studentsCourses}">
     <label for="courseName__${stat.index}__" th:for="studentsCourses[__${stat.index}__].courseName">受講コース名:</label>
     <select id="courseName__${stat.index}__" th:field="*{studentsCourses[__${stat.index}__].courseName}">
       <option value="Java">Java</option>
@@ -54,9 +63,29 @@
       <option value="AWS">AWS</option>
     </select>
   </div>
-<div>
-  <button type="submit">登録</button>
-</div>
+  <div>
+    <button type="submit">更新</button>
+  </div>
 </form>
+
+<script>
+  document.querySelector("form").addEventListener("submit", function(event) {
+      const courseNames = new Set();
+      let hasDuplicate = false;
+
+      document.querySelectorAll("select[id^='courseName']").forEach(select => {
+          if (courseNames.has(select.value)) {
+              alert("同じコースが複数選択されています: " + select.value);
+              hasDuplicate = true;
+          }
+          courseNames.add(select.value);
+      });
+
+      if (hasDuplicate) {
+          event.preventDefault(); // フォーム送信をキャンセル
+      }
+  });
+</script>
+
 </body>
 </html>
