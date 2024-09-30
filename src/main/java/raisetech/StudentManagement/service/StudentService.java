@@ -2,8 +2,6 @@ package raisetech.StudentManagement.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +21,20 @@ public class StudentService {
   }
 
   public List<Student> searchStudentList() {
-    return repository.search();
+    return repository.search(); //キャンセルされていない受講生を取得
+  }
+
+  public List<Student> searchCanceledStudents(){
+    return repository.searchCanceledStudents(); //キャンセルされた受講生を取得
+  }
+
+  public StudentDetail searchStudent(String id) {
+    Student student = repository.searchStudent(id);
+    List<StudentsCourses> studentsCourses = repository.searchStudentCourse(student.getId());
+    StudentDetail studentDetail = new StudentDetail();
+    studentDetail.setStudent(student);
+    studentDetail.setStudentsCourses(studentsCourses);
+    return studentDetail;
   }
 
   public List<StudentsCourses> searchStudentsCourseList() {
@@ -50,13 +61,11 @@ public class StudentService {
     }
   }
 
-  public StudentDetail searchStudent(String id) {
-    Student student = repository.searchStudent(id);
-    List<StudentsCourses> studentsCourses = repository.searchStudentCourse(student.getId());
-    StudentDetail studentDetail = new StudentDetail();
-    studentDetail.setStudent(student);
-    studentDetail.setStudentsCourses(studentsCourses);
-    return studentDetail;
+  public void restoreStudent(String studentId){
+    Student student = repository.searchStudent(studentId);
+    if(student != null && student.isDeleted()){
+      student.setDeleted(false); //キャンセルを解除
+      repository.updateStudent(student);
+    }
   }
 }
-
