@@ -2,6 +2,7 @@ package raisetech.StudentManagement.controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import raisetech.StudentManagement.controller.converter.StudentConverter;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentsCourses;
@@ -33,13 +35,12 @@ public class StudentController {
     List<Student> students = service.searchStudentList();
     List<StudentsCourses> studentsCourses = service.searchStudentsCourseList();
 
+    List<Student> filteredStudents = students.stream()
+        .filter(student -> !student.isDeleted())
+        .toList();
+
     model.addAttribute("studentList",converter.convertStudentDetails(students, studentsCourses));
     return "studentList";
-  }
-
-  @GetMapping("/studentsCourseList")
-  public List<StudentsCourses> getStudentsCourseList(){
-    return service.searchStudentsCourseList();
   }
 
   @GetMapping("/newStudent")
@@ -75,4 +76,17 @@ public class StudentController {
     return "updateStudent";
   }
 
+  @GetMapping("/restoreStudentList")
+  public String restoreStudentList(Model model){
+    List<Student> canceledStudents = service.searchCanceledStudents();
+    List<StudentsCourses> studentsCourses = service.searchStudentsCourseList();
+
+    model.addAttribute("canceledStudentList",converter.convertStudentDetails(canceledStudents, studentsCourses));
+    return "restoreStudentList";
+  }
+  @PostMapping("/restoreStudent")
+  public String restoreStudent(@RequestParam String studentId){
+    service.restoreStudent(studentId);
+    return "redirect:/restoreStudentList";
+  }
 }

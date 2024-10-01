@@ -12,8 +12,11 @@ import raisetech.StudentManagement.data.StudentsCourses;
 @Mapper
 public interface StudentRepository {
 
-  @Select("SELECT * FROM students")
+  @Select("SELECT * FROM students WHERE isDeleted = false")
   List<Student> search();
+
+  @Select("SELECT * FROM students WHERE isDeleted = true")
+  List<Student> searchCanceledStudents();
 
   @Select("SELECT * FROM students WHERE id = #{id}")
   Student searchStudent(String id);
@@ -24,20 +27,23 @@ public interface StudentRepository {
   @Select("SELECT * FROM students_courses WHERE student_id = #{studentId}")
   List<StudentsCourses> searchStudentCourse(String studentId);
 
-  @Insert("INSERT INTO students (name, kana_name, nickname, mail_address, area, age, gender, remark, isDeleted) "
-      + "VALUES (#{name}, #{kanaName}, #{nickname}, #{mailAddress}, #{area}, #{age}, #{gender}, #{remark}, false)")
-  @Options(useGeneratedKeys = true,keyProperty = "id")
+  @Insert(
+      "INSERT INTO students (name, kana_name, nickname, mail_address, area, age, gender, remark, isDeleted) "
+          + "VALUES (#{name}, #{kanaName}, #{nickname}, #{mailAddress}, #{area}, #{age}, #{gender}, #{remark}, false)")
+  @Options(useGeneratedKeys = true, keyProperty = "id")
   void registerStudent(Student student);
 
   @Insert("INSERT INTO students_courses(student_id, course_name, starting_date, end_date)"
       + "VALUES (#{studentId}, #{courseName}, #{startingDate}, #{endDate})")
-  @Options(useGeneratedKeys = true,keyProperty = "id")
+  @Options(useGeneratedKeys = true, keyProperty = "id")
   void registerStudentsCourses(StudentsCourses studentsCourses);
 
-  @Update("UPDATE students SET name = #{name}, kana_name = #{kanaName}, nickname = #{nickname}, mail_address = #{mailAddress},"
-      + "area = #{area}, age = #{age}, gender = #{gender}, remark = #{remark}, isDeleted = #{isDeleted} WHERE id = #{id}")
+  @Update(
+      "UPDATE students SET name = #{name}, kana_name = #{kanaName}, nickname = #{nickname}, mail_address = #{mailAddress},"
+          + "area = #{area}, age = #{age}, gender = #{gender}, remark = #{remark}, isDeleted = #{isDeleted} WHERE id = #{id}")
   void updateStudent(Student student);
 
   @Update("UPDATE students_courses SET course_name = #{courseName} WHERE id = #{id}")
   void updateStudentsCourses(StudentsCourses studentsCourses);
+
 }

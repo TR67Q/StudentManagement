@@ -2,10 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>受講生更新</title>
+  <title>受講生詳細</title>
 </head>
 <body>
-<h1>受講生更新</h1>
+<h1>受講生詳細</h1>
 <form th:action="@{/updateStudent}" th:object="${studentDetail}" method="post">
   <div>
     <label for="id">ID:</label>
@@ -46,6 +46,10 @@
   <div>
     <label for="remark">備考:</label>
     <input type="text" id="remark" th:field="*{student.remark}"/>
+  </div>
+  <div>
+    <label for="isDeleted">キャンセル:</label>
+    <input type="checkbox" id="isDeleted" th:field="*{student.deleted}"/>
   </div>
   <div th:each="course, stat : *{studentsCourses}">
     <label for="id__${stat.index}__" th:for="studentsCourses[__${stat.index}__].id">受講コースID:</label>
