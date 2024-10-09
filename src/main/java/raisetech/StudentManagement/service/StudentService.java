@@ -21,11 +21,7 @@ public class StudentService {
   }
 
   public List<Student> searchStudentList() {
-    return repository.search(); //キャンセルされていない受講生を取得
-  }
-
-  public List<Student> searchCanceledStudents(){
-    return repository.searchCanceledStudents(); //キャンセルされた受講生を取得
+    return repository.search();
   }
 
   public StudentDetail searchStudent(String id) {
@@ -58,14 +54,6 @@ public class StudentService {
     for (StudentsCourses studentsCourses : studentDetail.getStudentsCourses()) {
       studentsCourses.setStudentId(studentDetail.getStudent().getId());
       repository.updateStudentsCourses(studentsCourses);
-    }
-  }
-
-  public void restoreStudent(String studentId){
-    Student student = repository.searchStudent(studentId);
-    if(student != null && student.isDeleted()){
-      student.setDeleted(false); //キャンセルを解除
-      repository.updateStudent(student);
     }
   }
 }
