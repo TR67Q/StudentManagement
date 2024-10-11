@@ -12,11 +12,8 @@ import raisetech.StudentManagement.data.StudentsCourses;
 @Mapper
 public interface StudentRepository {
 
-  @Select("SELECT * FROM students WHERE isDeleted = false")
+  @Select("SELECT * FROM students")
   List<Student> search();
-
-  @Select("SELECT * FROM students WHERE isDeleted = true")
-  List<Student> searchCanceledStudents();
 
   @Select("SELECT * FROM students WHERE id = #{id}")
   Student searchStudent(String id);
@@ -45,5 +42,4 @@ public interface StudentRepository {
 
   @Update("UPDATE students_courses SET course_name = #{courseName} WHERE id = #{id}")
   void updateStudentsCourses(StudentsCourses studentsCourses);
-
 }
