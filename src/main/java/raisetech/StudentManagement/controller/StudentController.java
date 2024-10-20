@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import raisetech.StudentManagement.domain.StudentDetail;
+import raisetech.StudentManagement.exception.TestException;
 import raisetech.StudentManagement.service.StudentService;
 
 /**
@@ -31,25 +32,28 @@ public class StudentController {
   }
 
   /**
-   * 受講生詳細一覧検索機能
-   * 全件検索を行うので、条件指定は行いません
+   * 受講生詳細一覧検索機能 全件検索を行うので、条件指定は行いません
    *
    * @return 受講生詳細一覧（全件）
    */
   @GetMapping("/studentList")
-    public List<StudentDetail> getStudentList(){
+  public List<StudentDetail> getStudentList(){
     return service.searchStudentList();
   }
 
+  @GetMapping("/studentListException")
+  public List<StudentDetail> getStudentListException() throws TestException {
+    throw new TestException("エラーが発生しました。");
+  }
+
   /**
-   * 受講生詳細検索機能
-   * IDに紐づく任意の受講生情報を取得します
+   * 受講生詳細検索機能 IDに紐づく任意の受講生情報を取得します
    *
    * @param id 受講生ID
    * @return 受講生詳細
    */
   @GetMapping("/student/{id}")
-  public StudentDetail getStudent(@PathVariable @NotBlank @Size(min = 1, max = 3) String id){
+  public StudentDetail getStudent(@PathVariable @NotBlank @Size(min = 1, max = 3) String id) {
     return service.searchStudent(id);
   }
 
@@ -60,21 +64,22 @@ public class StudentController {
    * @return 実行結果
    */
   @PostMapping("/registerStudent")
-  public ResponseEntity<StudentDetail> registerStudent(@RequestBody @Valid StudentDetail studentDetail){
+  public ResponseEntity<StudentDetail> registerStudent(
+      @RequestBody @Valid StudentDetail studentDetail) {
     StudentDetail responseStudentDetail1 = service.registerStudent(studentDetail);
     return ResponseEntity.ok(responseStudentDetail1);
   }
 
   /**
-   * 受講生詳細の更新機能
-   * キャンセルフラグの更新もここで行います（論理削除）
+   * 受講生詳細の更新機能 キャンセルフラグの更新もここで行います（論理削除）
    *
    * @param studentDetail 受講生詳細
    * @return 実行結果
    */
   @PutMapping("/updateStudent")
-  public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail){
+  public ResponseEntity<String> updateStudent(@RequestBody @Valid StudentDetail studentDetail) {
     service.updateStudent(studentDetail);
     return ResponseEntity.ok("更新処理が成功しました。");
   }
+
 }
