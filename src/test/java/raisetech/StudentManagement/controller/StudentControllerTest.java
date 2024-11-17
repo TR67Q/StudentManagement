@@ -44,7 +44,7 @@ class StudentControllerTest {
   }
 
   @Test
-  void 受講生詳細の単一検索が実行できてその受講生のリストが返ってくること() throws Exception {
+  void 受講生詳細の単一検索が実行できて対象となる受講生のリストが返ってくること() throws Exception {
     String id = "999";
     mockMvc.perform(get("/student/{id}", id))
         .andExpect(status().isOk());
@@ -58,19 +58,19 @@ class StudentControllerTest {
         """
             {
                 "student": {
-                "name" : "江波公史",
-                "kanaName" : "エナミコウジ",
-                "nickname" : "コウジ",
-                "mailAddress" : "test@example.com",
-                "area" : "奈良",
-                "age" : "37",
-                "gender" : "男性",
-                "remark" : ""
+                    "name": "江波公史",
+                    "kanaName": "エナミコウジ",
+                    "nickname": "コウジ",
+                    "mailAddress": "test@example.com",
+                    "area": "奈良",
+                    "age": "37",
+                    "gender": "男性",
+                    "remark": ""
                 },
-                "studentCourseList" : [
-                {
-                "courseName" : "Java"
-                }
+                "studentCourseList": [
+                    {
+                        "courseName": "Java"
+                    }
                 ]
             }
         """
@@ -84,23 +84,23 @@ class StudentControllerTest {
   void 受講生詳細の更新が実行できて特定のメッセージが表示されること() throws Exception {
     mockMvc.perform(put("/updateStudent").contentType(MediaType.APPLICATION_JSON).content(
             """
-               {
-                   "student": {
-                   "name" : "江波公史",
-                   "kanaName" : "エナミコウジ",
-                   "nickname" : "コウジ",
-                   "mailAddress" : "test@example.com",
-                   "area" : "奈良",
-                   "age" : "37",
-                   "gender" : "男性",
-                   "remark" : ""
-                   },
-                   "studentCourseList" : [
-                   {
-                   "courseName" : ""
-                   }
-                   ]
-               }
+                {
+                    "student": {
+                        "name": "江波公史",
+                        "kanaName": "エナミコウジ",
+                        "nickname": "コウジ",
+                        "mailAddress": "test@example.com",
+                        "area": "奈良",
+                        "age": "37",
+                        "gender": "男性",
+                        "remark": ""
+                    },
+                    "studentCourseList": [
+                        {
+                            "courseName": ""
+                        }
+                    ]
+                }
            """
         ))
         .andExpect(status().isOk());
