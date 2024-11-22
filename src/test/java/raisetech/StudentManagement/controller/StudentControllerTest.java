@@ -7,6 +7,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import jakarta.validation.ConstraintViolation;
@@ -38,7 +39,8 @@ class StudentControllerTest {
   @Test
   void 受講生詳細の一覧検索が実行できて空のリストが返ってくること() throws Exception {
     mockMvc.perform(get("/studentList"))
-        .andExpect(status().isOk());
+        .andExpect(status().isOk())
+        .andExpect(content().json("[]"));
 
     verify(service, times(1)).searchStudentList();
   }
@@ -109,6 +111,13 @@ class StudentControllerTest {
   }
 
   @Test
+  void 受講生詳細の例外APIが実行できてステータスが400で返ってくること() throws Exception {
+    mockMvc.perform(get("/studentListException"))
+        .andExpect(status().is4xxClientError())
+        .andExpect(content().string("エラーが発生しました。"));
+  }
+
+  @Test
   void 受講生詳細の受講生で適切な値を入力した時に入力チェックに異常が発生しないこと() {
     Student student = new Student();
     student.setId("1");
@@ -122,7 +131,6 @@ class StudentControllerTest {
     Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
     assertThat(violations.size()).isEqualTo(0);
-
   }
 
   @Test
@@ -139,7 +147,8 @@ class StudentControllerTest {
     Set<ConstraintViolation<Student>> violations = validator.validate(student);
 
     assertThat(violations.size()).isEqualTo(1);
-    assertThat(violations).extracting("message").containsOnly("数字のみ入力するようにしてください。");
+    assertThat(violations).extracting("message")
+        .containsOnly("数字のみ入力するようにしてください。");
   }
 
   @Test
@@ -168,6 +177,7 @@ class StudentControllerTest {
     Set<ConstraintViolation<StudentCourse>> violations = validator.validate(studentCourse);
 
     assertThat(violations.size()).isEqualTo(1);
-    assertThat(violations).extracting("message").containsOnly("数字のみ入力するようにしてください。");
+    assertThat(violations).extracting("message")
+        .containsOnly("数字のみ入力するようにしてください。");
   }
 }
