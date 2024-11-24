@@ -91,7 +91,7 @@ class StudentRepositoryTest {
     assertThat(updatedStudentCourse.getCourseName()).isEqualTo("Music");
   }
 
-  private static Student createStudent() {
+  private Student createStudent() {
     Student student = new Student();
     student.setName("山田太郎");
     student.setKanaName("ヤマダタロウ");
