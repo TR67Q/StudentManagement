@@ -21,17 +21,7 @@ class StudentConverterTest {
 
   @Test
   void 受講生のリストと受講生コース情報のリストを渡して受講生詳細のリストが作成できること(){
-    Student student = new Student();
-    student.setId("1");
-    student.setName("山田太郎");
-    student.setKanaName("ヤマダタロウ");
-    student.setNickname("タロ");
-    student.setMailAddress("taro@example.com");
-    student.setArea("東京");
-    student.setAge(27);
-    student.setGender("男性");
-    student.setRemark("");
-    student.setDeleted(false);
+    Student student = createStudent();
 
     StudentCourse studentCourse = new StudentCourse();
     studentCourse.setId("1");
@@ -50,18 +40,8 @@ class StudentConverterTest {
   }
 
   @Test
-  void 受講生のリストと受講生コース情報のリストを渡したときに受講生IDが紐づかない受講生コース情報は除外されること(){
-    Student student = new Student();
-    student.setId("1");
-    student.setName("山田太郎");
-    student.setKanaName("ヤマダタロウ");
-    student.setNickname("タロ");
-    student.setMailAddress("taro@example.com");
-    student.setArea("東京");
-    student.setAge(27);
-    student.setGender("男性");
-    student.setRemark("");
-    student.setDeleted(false);
+  void 受講生のリストと受講生コース情報のリストを渡したときに受講生IDと紐づかない受講生コース情報は除外されること(){
+    Student student = createStudent();
 
     StudentCourse studentCourse = new StudentCourse();
     studentCourse.setId("1");
@@ -79,4 +59,18 @@ class StudentConverterTest {
     assertThat(actual.get(0).getStudentCourseList()).isEmpty();
   }
 
+  private Student createStudent() {
+    Student student = new Student();
+    student.setId("1");
+    student.setName("山田太郎");
+    student.setKanaName("ヤマダタロウ");
+    student.setNickname("タロ");
+    student.setMailAddress("taro@example.com");
+    student.setArea("東京");
+    student.setAge(27);
+    student.setGender("男性");
+    student.setRemark("");
+    student.setDeleted(false);
+    return student;
+  }
 }
