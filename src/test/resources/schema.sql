@@ -18,5 +18,14 @@ CREATE TABLE IF NOT EXISTS students_courses
     student_id INT NOT NULL,
     course_name VARCHAR(36) NOT NULL,
     starting_date TIMESTAMP,
-    end_date TIMESTAMP
+    end_date TIMESTAMP,
+    isDeleted boolean
+);
+
+CREATE TABLE IF NOT EXISTS student_course_status
+(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    course_name VARCHAR(255) NOT NULL,
+    course_status_id INT NOT NULL,
+    status VARCHAR(36) NOT NULL
 );

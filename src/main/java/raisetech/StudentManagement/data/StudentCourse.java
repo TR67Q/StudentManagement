@@ -3,6 +3,7 @@ package raisetech.StudentManagement.data;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Pattern;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,4 +22,6 @@ public class StudentCourse {
 
   private LocalDateTime startingDate;
   private LocalDateTime endDate;
+
+  private List<StudentCourseStatus> studentCourseStatusList;
 }

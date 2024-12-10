@@ -4,18 +4,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -23,6 +29,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import raisetech.StudentManagement.data.Student;
 import raisetech.StudentManagement.data.StudentCourse;
+import raisetech.StudentManagement.data.StudentCourseStatus;
 import raisetech.StudentManagement.service.StudentService;
 
 @WebMvcTest(StudentController.class)
@@ -31,8 +38,16 @@ class StudentControllerTest {
   @Autowired
   private MockMvc mockMvc;
 
+  @Autowired
+  private ObjectMapper objectMapper;
+
   @MockBean
   private StudentService service;
+
+  @BeforeEach
+  void setUp() {
+    MockitoAnnotations.openMocks(this);
+  }
 
   private Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
@@ -52,6 +67,23 @@ class StudentControllerTest {
         .andExpect(status().isOk());
 
     verify(service, times(1)).searchStudent(id);
+  }
+
+  @Test
+  void 受講生詳細の条件検索が実行できて空のリストが返ってくること() throws Exception {
+    // モックデータの設定（空のリストを返す）
+    when(service.searchFilteredStudentList(any(), any(), any(), any(), any(), any()))
+        .thenReturn(List.of());  // 空リストを返す
+
+    // テスト実行
+    mockMvc.perform(get("/filteredStudentList")
+            .param("name", "山田太郎")  // 名前のパラメータを設定
+            .param("gender", "男性"))  // 性別のパラメータを設定
+        .andExpect(status().isOk())  // ステータスコード 200 を期待
+        .andExpect(content().json("[]"));  // 空リストが返されることを期待
+
+    // モックの呼び出し回数を検証
+    verify(service, times(1)).searchFilteredStudentList(any(), any(), any(), any(), any(), any());
   }
 
   @Test
@@ -111,11 +143,64 @@ class StudentControllerTest {
   }
 
   @Test
-  void 受講生詳細の例外APIが実行できてステータスが400で返ってくること() throws Exception {
-    mockMvc.perform(get("/studentListException"))
-        .andExpect(status().is4xxClientError())
-        .andExpect(content().string("エラーが発生しました。"));
+  void 受講生コースの申込状況の更新が行えること() throws Exception {
+    StudentCourseStatus status = new StudentCourseStatus();
+
+    mockMvc.perform(put("/updateCourseStatus")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(status)))
+        .andExpect(status().isOk())
+        .andExpect(content().string("受講生コース申込状況の更新に成功しました。"));
+
+    verify(service, times(1)).updateStudentCourseStatus(any());
   }
+
+  @Test
+  void 受講生情報の論理削除が行えること() throws Exception {
+    String id = "99";
+
+    mockMvc.perform(delete("/students/{id}", id))
+        .andExpect(status().isOk())
+        .andExpect(content().string("受講生情報を削除しました。"));
+
+    verify(service, times(1)).deleteStudent(id);
+  }
+
+  @Test
+  void 受講生コース情報の論理削除が行えること() throws Exception {
+    String id = "99";
+
+    mockMvc.perform(delete("/students/courses/{id}", id))
+        .andExpect(status().isOk())
+        .andExpect(content().string("受講生コース情報を削除しました。"));
+
+    verify(service, times(1)).deleteStudentCourse(id);
+  }
+
+  @Test
+  void 受講生コースの申込状況の全件検索が行えること() throws Exception {
+    when(service.getAllCourseStatuses()).thenReturn(List.of());
+
+    mockMvc.perform(get("/courseStatuses"))
+        .andExpect(status().isOk())
+        .andExpect(content().json("[]"));
+
+    verify(service, times(1)).getAllCourseStatuses();
+  }
+
+  @Test
+  void 受講生コースの条件検索が行えること() throws Exception {
+    String courseName = "Java";
+    when(service.getCourseStatusesByCourseName(courseName)).thenReturn(List.of());
+
+    mockMvc.perform(get("/searchCourseStatuses")
+            .param("courseName", courseName))
+        .andExpect(status().isOk())
+        .andExpect(content().json("[]"));
+
+    verify(service, times(1)).getCourseStatusesByCourseName(courseName);
+  }
+
 
   @Test
   void 受講生詳細の受講生で適切な値を入力した時に入力チェックに異常が発生しないこと() {
