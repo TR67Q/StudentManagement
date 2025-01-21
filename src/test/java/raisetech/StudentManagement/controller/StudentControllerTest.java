@@ -71,18 +71,15 @@ class StudentControllerTest {
 
   @Test
   void 受講生詳細の条件検索が実行できて空のリストが返ってくること() throws Exception {
-    // モックデータの設定（空のリストを返す）
     when(service.searchFilteredStudentList(any(), any(), any(), any(), any(), any()))
-        .thenReturn(List.of());  // 空リストを返す
+        .thenReturn(List.of());
 
-    // テスト実行
     mockMvc.perform(get("/filteredStudentList")
-            .param("name", "山田太郎")  // 名前のパラメータを設定
-            .param("gender", "男性"))  // 性別のパラメータを設定
-        .andExpect(status().isOk())  // ステータスコード 200 を期待
-        .andExpect(content().json("[]"));  // 空リストが返されることを期待
+            .param("name", "山田太郎")
+            .param("gender", "男性"))
+        .andExpect(status().isOk())
+        .andExpect(content().json("[]"));
 
-    // モックの呼び出し回数を検証
     verify(service, times(1)).searchFilteredStudentList(any(), any(), any(), any(), any(), any());
   }
 

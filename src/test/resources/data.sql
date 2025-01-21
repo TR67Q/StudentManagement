@@ -21,4 +21,4 @@ VALUES('Music', 1, '仮申込'),
       ('English', 4, '受講中'),
       ('Java', 5, '仮申込'),
       ('Music', 6, '受講終了'),
-      ('Marketing', 7, '仮申込')
+      ('Marketing', 7, '仮申込');
