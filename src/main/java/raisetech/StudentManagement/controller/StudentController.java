@@ -83,9 +83,6 @@ public class StudentController {
       @RequestParam(required = false) Integer age,
       @RequestParam(required = false) String gender) {
     List<StudentDetail> filteredStudentList = service.searchFilteredStudentList(name, kanaName, mailAddress, area, age, gender);
-    if (filteredStudentList.isEmpty()) {
-      return ResponseEntity.ok(Collections.emptyList());  // ここで 200 OK と空リストを返す
-    }
     return ResponseEntity.ok(filteredStudentList);
   }
 

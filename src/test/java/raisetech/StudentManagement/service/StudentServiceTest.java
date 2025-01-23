@@ -72,45 +72,156 @@ class StudentServiceTest {
   }
 
   @Test
-  void 受講生詳細の条件検索() {
+  void 受講生詳細の条件検索_名前で検索できること() {
     String name = "山田太郎";
-    String kanaName = "ヤマダタロウ";
-    String nickname = "タロ";
-    String mailAddress = "taro@example.com";
-    String area = "東京";
-    int age = 27;
-    String gender = "男性";
 
     Student student = new Student();
-    List<Student> studentList = List.of(student);
     student.setName(name);
-    student.setKanaName(kanaName);
-    student.setNickname(nickname);
-    student.setMailAddress(mailAddress);
-    student.setArea(area);
-    student.setAge(age);
-    student.setGender(gender);
+    List<Student> studentList = List.of(student);
 
     List<StudentCourse> studentCourseList = new ArrayList<>();
-    List<StudentCourseStatus> studentCourseStatusList = new ArrayList<>();
+    StudentDetail expectedDetail = new StudentDetail(student, studentCourseList);
+    List<StudentDetail> expected = List.of(expectedDetail);
 
-    when(repository.searchFilteredStudent(name, kanaName,mailAddress, area, age, gender))
+    when(repository.searchFilteredStudent(name, null, null, null, 0, null))
         .thenReturn(studentList);
     when(repository.searchStudentsCourseList())
         .thenReturn(studentCourseList);
-    when(repository.searchAllCourseStatuses())
-        .thenReturn(studentCourseStatusList);
 
-    StudentDetail studentDetail = new StudentDetail(student, studentCourseList);
-    List<StudentDetail> expected = List.of(studentDetail);
+    List<StudentDetail> actual = sut.searchFilteredStudentList(name, null, null, null, 0, null);
 
-    List<StudentDetail> actual = sut.searchFilteredStudentList(name, kanaName,mailAddress, area, age, gender);
-
-    verify(repository, times(1)).searchFilteredStudent(name, kanaName, mailAddress, area, age, gender);
+    verify(repository, times(1)).searchFilteredStudent(name, null, null, null, 0, null);
     verify(repository, times(1)).searchStudentsCourseList();
-    verify(repository, times(1)).searchAllCourseStatuses();
 
     assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+  }
+
+  @Test
+  void 受講生詳細の条件検索_カナ名で検索できること() {
+    String kanaName = "ヤマダタロウ";
+
+    Student student = new Student();
+    student.setKanaName(kanaName);
+    List<Student> studentList = List.of(student);
+
+    List<StudentCourse> studentCourseList = new ArrayList<>();
+    StudentDetail expectedDetail = new StudentDetail(student, studentCourseList);
+    List<StudentDetail> expected = List.of(expectedDetail);
+
+    when(repository.searchFilteredStudent(null, kanaName, null, null, 0, null))
+        .thenReturn(studentList);
+    when(repository.searchStudentsCourseList())
+        .thenReturn(studentCourseList);
+
+    List<StudentDetail> actual = sut.searchFilteredStudentList(null, kanaName, null, null, 0, null);
+
+    verify(repository, times(1)).searchFilteredStudent(null, kanaName, null, null, 0, null);
+    verify(repository, times(1)).searchStudentsCourseList();
+
+    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+
+  }
+
+  @Test
+  void 受講生詳細の条件検索_メールアドレスで検索できること() {
+    String mailAddress = "taro@example.com";
+
+    Student student = new Student();
+    student.setMailAddress(mailAddress);
+    List<Student> studentList = List.of(student);
+
+    List<StudentCourse> studentCourseList = new ArrayList<>();
+    StudentDetail expectedDetail = new StudentDetail(student, studentCourseList);
+    List<StudentDetail> expected = List.of(expectedDetail);
+
+    when(repository.searchFilteredStudent(null, null, mailAddress, null, 0, null))
+        .thenReturn(studentList);
+    when(repository.searchStudentsCourseList())
+        .thenReturn(studentCourseList);
+
+    List<StudentDetail> actual = sut.searchFilteredStudentList(null, null, mailAddress, null, 0, null);
+
+    verify(repository, times(1)).searchFilteredStudent(null, null, mailAddress, null, 0, null);
+    verify(repository, times(1)).searchStudentsCourseList();
+
+    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+
+  }
+
+  @Test
+  void 受講生詳細の条件検索_住所で検索できること() {
+    String area = "東京";
+
+    Student student = new Student();
+    student.setArea(area);
+    List<Student> studentList = List.of(student);
+
+    List<StudentCourse> studentCourseList = new ArrayList<>();
+    StudentDetail expectedDetail = new StudentDetail(student, studentCourseList);
+    List<StudentDetail> expected = List.of(expectedDetail);
+
+    when(repository.searchFilteredStudent(null, null, null, area, 0, null))
+        .thenReturn(studentList);
+    when(repository.searchStudentsCourseList())
+        .thenReturn(studentCourseList);
+
+    List<StudentDetail> actual = sut.searchFilteredStudentList(null, null, null, area, 0, null);
+
+    verify(repository, times(1)).searchFilteredStudent(null, null, null, area, 0, null);
+    verify(repository, times(1)).searchStudentsCourseList();
+
+    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+  }
+
+  @Test
+  void 受講生詳細の条件検索_年齢で検索できること() {
+    int age = 27;
+
+    Student student = new Student();
+    student.setAge(age);
+    List<Student> studentList = List.of(student);
+
+    List<StudentCourse> studentCourseList = new ArrayList<>();
+    StudentDetail expectedDetail = new StudentDetail(student, studentCourseList);
+    List<StudentDetail> expected = List.of(expectedDetail);
+
+    when(repository.searchFilteredStudent(null, null, null, null, age, null))
+        .thenReturn(studentList);
+    when(repository.searchStudentsCourseList())
+        .thenReturn(studentCourseList);
+
+    List<StudentDetail> actual = sut.searchFilteredStudentList(null, null, null, null, age, null);
+
+    verify(repository, times(1)).searchFilteredStudent(null, null, null, null, age, null);
+    verify(repository, times(1)).searchStudentsCourseList();
+
+    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+  }
+
+  @Test
+  void 受講生詳細の条件検索_性別で検索できること() {
+    String gender = "男性";
+
+    Student student = new Student();
+    student.setGender(gender);
+    List<Student> studentList = List.of(student);
+
+    List<StudentCourse> studentCourseList = new ArrayList<>();
+    StudentDetail expectedDetail = new StudentDetail(student, studentCourseList);
+    List<StudentDetail> expected = List.of(expectedDetail);
+
+    when(repository.searchFilteredStudent(null, null, null, null, 0, gender))
+        .thenReturn(studentList);
+    when(repository.searchStudentsCourseList())
+        .thenReturn(studentCourseList);
+
+    List<StudentDetail> actual = sut.searchFilteredStudentList(null, null, null, null, 0, gender);
+
+    verify(repository, times(1)).searchFilteredStudent(null, null, null, null, 0, gender);
+    verify(repository, times(1)).searchStudentsCourseList();
+
+    assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
+
   }
 
   @Test

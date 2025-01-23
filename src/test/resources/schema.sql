@@ -27,5 +27,5 @@ CREATE TABLE IF NOT EXISTS student_course_status
     id INT PRIMARY KEY AUTO_INCREMENT,
     course_name VARCHAR(255) NOT NULL,
     course_status_id INT NOT NULL,
-    status VARCHAR(36) NOT NULL
+    status ENUM('仮申込', '本申込', '受講中', '受講終了') NOT NULL
 );
