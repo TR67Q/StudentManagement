@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="raisetech.StudentManagement.service.StudentServiceTest" tests="15" skipped="0" failures="0" errors="0" timestamp="2024-12-12T04:33:35" hostname="SYOUHEI" time="1.806">
+  <properties/>
+  <testcase name="受講生コースの申込状況の更新()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="1.539"/>
+  <testcase name="受講生詳細の更新_リポジトリの処理が適切に呼び出せていること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.011"/>
+  <testcase name="受講生情報の論理削除()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.006"/>
+  <testcase name="受講生コース情報の論理削除()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.006"/>
+  <testcase name="受講生詳細の条件検索_年齢で検索できること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.13"/>
+  <testcase name="受講生詳細の条件検索_名前で検索できること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.007"/>
+  <testcase name="受講生詳細の単一検索_リポジトリの処理が適切に呼び出せていること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.012"/>
+  <testcase name="受講生コースの申込状況の全件検索()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.007"/>
+  <testcase name="受講生詳細の条件検索_性別で検索できること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.006"/>
+  <testcase name="受講生コースの申込状況の条件検索()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.005"/>
+  <testcase name="受講生詳細の一覧検索_リポジトリとコンバーターの処理が適切に呼び出せていること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.019"/>
+  <testcase name="受講生詳細の条件検索_住所で検索できること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.005"/>
+  <testcase name="受講生詳細の条件検索_メールアドレスで検索できること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.005"/>
+  <testcase name="受講生詳細の新規登録_リポジトリの処理が適切に呼び出せていること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.006"/>
+  <testcase name="受講生詳細の条件検索_カナ名で検索できること()" classname="raisetech.StudentManagement.service.StudentServiceTest" time="0.007"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (C:\Users\syohe\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.18\417558ea01fe9f0e8a94af28b9469d281c4e3984\byte-buddy-agent-1.14.18.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
+</testsuite>
