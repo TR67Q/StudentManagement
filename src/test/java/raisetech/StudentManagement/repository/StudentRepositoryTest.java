@@ -89,7 +89,7 @@ class StudentRepositoryTest {
     StudentCourseStatus status = new StudentCourseStatus();
     status.setCourseName("Java");
     status.setCourseStatusId("99");
-    status.setStatus("仮登録");
+    status.setStatus("仮申込");
 
     sut.registerStudentCourseStatus(status);
 
