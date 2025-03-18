@@ -250,7 +250,7 @@ class StudentControllerTest {
   @Test
   void 受講生詳細の受講生コース情報でIDに数字以外を用いた時に入力チェックに掛かること(){
     StudentCourse studentCourse = new StudentCourse();
-    studentCourse.setId("テストです。");
+    studentCourse.setId("テスト");
     studentCourse.setStudentId("1");
     studentCourse.setCourseName("Java");
     studentCourse.setStartingDate(LocalDateTime.now());
