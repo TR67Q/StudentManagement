@@ -34,7 +34,7 @@ jobs:
       - name: Grant execute permission for Gradle Wrapper
         run: chmod +x gradlew
 
-      - name: Build with Gradle Wrapper
+      - name: Test with Gradle Wrapper
         run: ./gradlew test
 
       - name: Build with Gradle Wrapper
